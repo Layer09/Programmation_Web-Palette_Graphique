@@ -19,20 +19,29 @@ let offsetX = 0, offsetY = 0;
 function setMode(newMode) {
     mode = newMode;
 
+    // reset boutons
     document.querySelectorAll("#toolbar button").forEach(btn => {
         btn.classList.remove("active");
     });
+
+    // reset body classes
+    document.body.classList.remove("draw-mode", "move-mode", "delete-mode");
+    document.body.classList.add(newMode + "-mode");
 
     if (newMode === "draw") document.getElementById("drawMode").classList.add("active");
     if (newMode === "move") document.getElementById("moveMode").classList.add("active");
     if (newMode === "delete") document.getElementById("deleteMode").classList.add("active");
 }
 
+// init
+setMode("draw");
+
+// boutons
 document.getElementById("drawMode").onclick = () => setMode("draw");
 document.getElementById("moveMode").onclick = () => setMode("move");
 document.getElementById("deleteMode").onclick = () => setMode("delete");
 
-// ================== CHOIX FORME ==================
+// formes
 document.querySelectorAll("[data-shape]").forEach(btn => {
     btn.onclick = () => currentShape = btn.dataset.shape;
 });
@@ -40,24 +49,23 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 // ================== MOUSEDOWN ==================
 canvas.addEventListener("mousedown", (e) => {
 
-    const target = e.target;
     const canvasRect = canvas.getBoundingClientRect();
 
     // ===== DEPLACEMENT =====
-    if (mode === "move" && target.classList.contains("shape")) {
+    if (mode === "move" && e.target.classList.contains("shape")) {
 
         isDragging = true;
-        draggedElement = target;
+        draggedElement = e.target;
 
-        const rect = target.getBoundingClientRect();
+        const rect = draggedElement.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
 
         return;
     }
 
-    // ===== DESSIN =====
-    if (mode === "draw") {
+    // ===== DESSIN (UNIQUEMENT SUR LE CANVAS) =====
+    if (mode === "draw" && e.target === canvas) {
 
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
@@ -131,7 +139,7 @@ document.addEventListener("mouseup", () => {
     isDragging = false;
 });
 
-// ================== CLICK (DELETE / COLOR) ==================
+// ================== CLICK ==================
 canvas.addEventListener("click", (e) => {
 
     const target = e.target;
@@ -143,7 +151,7 @@ canvas.addEventListener("click", (e) => {
         return;
     }
 
-    // changement de couleur
+    // changement couleur
     if (mode === "draw") {
         if (target.classList.contains("triangle")) {
             target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
