@@ -1,14 +1,16 @@
+// ================== ELEMENTS ==================
 const canvas = document.getElementById("canvas");
 const colorPicker = document.getElementById("colorPicker");
 
 let currentShape = "rectangle";
 let mode = "draw";
 
+// dessin
 let isDrawing = false;
 let startX, startY;
 let currentElement = null;
 
-// DRAG
+// déplacement
 let isDragging = false;
 let draggedElement = null;
 let offsetX = 0;
@@ -31,18 +33,18 @@ document.getElementById("drawMode").onclick = () => setMode("draw");
 document.getElementById("moveMode").onclick = () => setMode("move");
 document.getElementById("deleteMode").onclick = () => setMode("delete");
 
-// forme
+// ================== CHOIX FORME ==================
 document.querySelectorAll("[data-shape]").forEach(btn => {
     btn.onclick = () => currentShape = btn.dataset.shape;
 });
 
-// ================== DESSIN ==================
+// ================== MOUSEDOWN ==================
 canvas.addEventListener("mousedown", (e) => {
 
-    // DRAG MODE
-    if (mode === "move") {
-        const target = e.target;
-        if (!target.classList.contains("shape")) return;
+    const target = e.target;
+
+    // ===== DEPLACEMENT =====
+    if (mode === "move" && target.classList.contains("shape")) {
 
         isDragging = true;
         draggedElement = target;
@@ -50,29 +52,31 @@ canvas.addEventListener("mousedown", (e) => {
         const rect = target.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
+
         return;
     }
 
-    // DRAW MODE
-    if (mode !== "draw") return;
+    // ===== DESSIN =====
+    if (mode === "draw") {
 
-    isDrawing = true;
-    startX = e.offsetX;
-    startY = e.offsetY;
+        isDrawing = true;
+        startX = e.offsetX;
+        startY = e.offsetY;
 
-    currentElement = document.createElement("div");
-    currentElement.classList.add("shape");
+        currentElement = document.createElement("div");
+        currentElement.classList.add("shape");
 
-    currentElement.style.left = startX + "px";
-    currentElement.style.top = startY + "px";
+        currentElement.style.left = startX + "px";
+        currentElement.style.top = startY + "px";
 
-    canvas.appendChild(currentElement);
+        canvas.appendChild(currentElement);
+    }
 });
 
-// dessin dynamique
+// ================== MOUSEMOVE ==================
 canvas.addEventListener("mousemove", (e) => {
 
-    // DRAG
+    // ===== DRAG =====
     if (isDragging) {
         const canvasRect = canvas.getBoundingClientRect();
 
@@ -81,25 +85,27 @@ canvas.addEventListener("mousemove", (e) => {
         return;
     }
 
-    // DRAW
+    // ===== DRAW =====
     if (!isDrawing) return;
 
     let width = e.offsetX - startX;
     let height = e.offsetY - startY;
 
-    // gérer dessin dans tous les sens
+    // gestion dessin dans tous les sens
     currentElement.style.left = (width < 0 ? e.offsetX : startX) + "px";
     currentElement.style.top = (height < 0 ? e.offsetY : startY) + "px";
 
     width = Math.abs(width);
     height = Math.abs(height);
 
+    // rectangle
     if (currentShape === "rectangle") {
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
     }
 
+    // cercle
     if (currentShape === "circle") {
         currentElement.classList.add("circle");
         currentElement.style.width = width + "px";
@@ -107,6 +113,7 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.backgroundColor = colorPicker.value;
     }
 
+    // triangle
     if (currentShape === "triangle") {
         currentElement.classList.add("triangle");
         currentElement.style.borderWidth = `0 ${width/2}px ${height}px ${width/2}px`;
@@ -115,25 +122,25 @@ canvas.addEventListener("mousemove", (e) => {
     }
 });
 
-// fin actions
+// ================== MOUSEUP ==================
 document.addEventListener("mouseup", () => {
     isDrawing = false;
     isDragging = false;
 });
 
-// ================== CLICK SUR FORMES ==================
+// ================== CLICK (COLOR / DELETE) ==================
 canvas.addEventListener("click", (e) => {
 
     const target = e.target;
     if (!target.classList.contains("shape")) return;
 
-    // DELETE
+    // suppression
     if (mode === "delete") {
         target.remove();
         return;
     }
 
-    // COLOR CHANGE
+    // changement couleur
     if (mode === "draw") {
         if (target.classList.contains("triangle")) {
             target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
