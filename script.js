@@ -4,7 +4,7 @@ const colorPicker = document.getElementById("colorPicker"); // https://developer
 
 // Elements sélectionnés par défaut (Dessiner et Rectangle)
 let currentShape = "rectangle";
-let mode = "draw";
+let mode = "dessin";
 
 // Dessin
 let isDrawing = false;
@@ -22,30 +22,30 @@ function setMode(newMode) {
 
     // reset boutons mode
     document.querySelectorAll("#toolbar button").forEach(btn => {
-        btn.classList.remove("active");
+        btn.classList.redeplace("active");
     });
 
     // reset body classes
-    document.body.classList.remove("draw-mode", "move-mode", "delete-mode");
+    document.body.classList.redeplace("dessin-mode", "deplace-mode", "supprime-mode");
     document.body.classList.add(newMode + "-mode");
 
     /* Méthode dessin */
-    if (newMode === "draw") {
-        document.getElementById("drawMode").classList.add("active");
+    if (newMode === "dessin") {
+        document.getElementById("dessinMode").classList.add("active");
 
         // Reprendre la dernière forme sélectionnée pour la rendre active quand le bouton "Dessin" est à nouveau sélectionné
         setActiveShapeButton(currentShape);
     }
 
     /* Méthode déplacer */
-    if (newMode === "move") {
-        document.getElementById("moveMode").classList.add("active");
+    if (newMode === "deplace") {
+        document.getElementById("deplaceMode").classList.add("active");
         clearShapeButtons();
     }
 
     /* Méthide supprimer */
-    if (newMode === "delete") {
-        document.getElementById("deleteMode").classList.add("active");
+    if (newMode === "supprime") {
+        document.getElementById("supprimeMode").classList.add("active");
         clearShapeButtons();
     }
 }
@@ -53,7 +53,7 @@ function setMode(newMode) {
 // Déselectionner un bouton quand on change de forme
 function clearShapeButtons() {
     document.querySelectorAll("[data-shape]").forEach(btn => {
-        btn.classList.remove("active");
+        btn.classList.redeplace("active");
     });
 }
 
@@ -65,20 +65,20 @@ function setActiveShapeButton(shape) {
 }
 
 // Initialiser le dessin
-setMode("draw");
+setMode("dessin");
 
 // Boutons modes
-document.getElementById("drawMode").onclick = () => setMode("draw");
-document.getElementById("moveMode").onclick = () => setMode("move");
-document.getElementById("deleteMode").onclick = () => setMode("delete");
+document.getElementById("dessinMode").onclick = () => setMode("dessin");
+document.getElementById("deplaceMode").onclick = () => setMode("deplace");
+document.getElementById("supprimeMode").onclick = () => setMode("supprime");
 
 // Boutons formes
 document.querySelectorAll("[data-shape]").forEach(btn => {
     btn.onclick = () => {
         currentShape = btn.dataset.shape;
 
-        // activer seulement en mode draw
-        if (mode === "draw") {
+        // activer seulement en mode dessin
+        if (mode === "dessin") {
             setActiveShapeButton(currentShape);
         }
     };
@@ -91,7 +91,7 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
     const canvasRect = canvas.getBoundingClientRect();
 
     // Déplacement
-    if (mode === "move" && e.target.classList.contains("shape")) {
+    if (mode === "deplace" && e.target.classList.contains("shape")) {
 
         isDragging = true;
         draggedElement = e.target;
@@ -104,7 +104,7 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
     }
 
     // Dessin sur le canva
-    if (mode === "draw" && e.target === canvas) {
+    if (mode === "dessin" && e.target === canvas) {
 
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
@@ -122,7 +122,7 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
 });
 
 // Déplacement de la souris
-canvas.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousedeplace", (e) => {
     // Déplacement de la souris (sans clic)
 
     const canvasRect = canvas.getBoundingClientRect();
@@ -156,8 +156,8 @@ canvas.addEventListener("mousemove", (e) => {
     }
 
     // Cercle
-    if (currentShape === "circle") {
-        currentElement.classList.add("circle");
+    if (currentShape === "cercle") {
+        currentElement.classList.add("cercle");
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
@@ -186,13 +186,13 @@ canvas.addEventListener("click", (e) => {
     if (!target.classList.contains("shape")) return;
 
     // Suppression
-    if (mode === "delete") {
-        target.remove();
+    if (mode === "supprime") {
+        target.redeplace();
         return;
     }
 
     // Changement couleur
-    if (mode === "draw") {
+    if (mode === "dessin") {
         if (target.classList.contains("triangle")) {
             target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
         } else {
