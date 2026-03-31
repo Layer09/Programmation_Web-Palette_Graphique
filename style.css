@@ -1,11 +1,9 @@
-/* GLOBAL */
 body {
     margin: 0;
-    font-family: Arial;
     display: flex;
 }
 
-/* TOOLBAR */
+/* Barre d'outils (à gauche) */
 #toolbar {
     width: 120px;
     background: #333333;
@@ -17,10 +15,12 @@ body {
     box-sizing: border-box;
 }
 
+/* Séparation des "zones" dans la barre d'outils */
 hr {
     color: #333333
 }
 
+/* Boutons de la barre d'outils */
 #toolbar button,
 #toolbar input {
     width: 100%;
@@ -32,50 +32,52 @@ hr {
     border: none;
 }
 
+/* Taille des différents logos dans les boutons */
 #rectangle {
     font-size: 25px;
 }
-
 #circle {
     font-size: 30px;
 }
-
 #triangle {
     font-size: 25px;
 }
+#drawMode, #moveMode, #deleteMode {
+    font-size: 25px;
+}
 
-/* couleur active */
+/* Couleur des boutons actifs */
 .active {
     background: #00bbff;
 }
 
-/* CANVAS */
+/* Canva (fond gris, presque blanc) */
 #canvas {
-    flex: 1; /* prend tout l’espace restant */
+    flex: 1;
     height: 100vh;
     position: relative;
     background: #EEEEEE;
     overflow: hidden;
 }
 
-/* FORMES */
+/* Formes */
 .shape {
     position: absolute;
 }
 
-/* cercle */
+/* Cercle */
 .circle {
     border-radius: 50%;
 }
 
-/* triangle */
+/* Triangle */
 .triangle {
     width: 0;
     height: 0;
     border-style: solid;
 }
 
-/* bloque les formes en mode dessin */
+/* Bloque les formes en mode dessin */
 body.draw-mode .shape {
     pointer-events: none;
 }
