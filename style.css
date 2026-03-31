@@ -30,6 +30,17 @@ hr {
     box-sizing: border-box;
     cursor: pointer;
     border: none;
+}
+
+#rectangle {
+    font-size: 25px;
+}
+
+#cercle {
+    font-size: 30px;
+}
+
+#triangle {
     font-size: 25px;
 }
 
