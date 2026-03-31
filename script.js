@@ -114,7 +114,7 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
-        if (newMode === "draw") document.getElementById("rectangle").classList.add("active");
+        if (mode === "draw") document.getElementById("rectangle").classList.add("active");
     }
 
     // cercle
@@ -123,7 +123,7 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
-        if (newMode === "draw") document.getElementById("circle").classList.add("active");
+        if (mode === "draw") document.getElementById("circle").classList.add("active");
 
     }
 
@@ -133,7 +133,7 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.borderWidth = `0 ${width/2}px ${height}px ${width/2}px`;
         currentElement.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
         currentElement.style.backgroundColor = "transparent";
-        if (newMode === "draw") document.getElementById("triangle").classList.add("active");
+        if (mode === "draw") document.getElementById("triangle").classList.add("active");
 
     }
 });
