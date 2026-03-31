@@ -26,7 +26,7 @@ function setMode(newMode) {
     });
 
     // reset body classes
-    document.body.classList.redeplace("dessin-mode", "deplace-mode", "supprime-mode");
+    document.body.classList.remove("dessin-mode", "deplace-mode", "supprime-mode");
     document.body.classList.add(newMode + "-mode");
 
     /* Méthode dessin */
@@ -53,7 +53,7 @@ function setMode(newMode) {
 // Déselectionner un bouton quand on change de forme
 function clearShapeButtons() {
     document.querySelectorAll("[data-shape]").forEach(btn => {
-        btn.classList.redeplace("active");
+        btn.classList.remove("active");
     });
 }
 
@@ -187,7 +187,7 @@ canvas.addEventListener("click", (e) => {
 
     // Suppression
     if (mode === "supprime") {
-        target.redeplace();
+        target.remove();
         return;
     }
 
