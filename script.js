@@ -22,7 +22,7 @@ function setMode(newMode) {
 
     // reset boutons mode
     document.querySelectorAll("#toolbar button").forEach(btn => {
-        btn.classList.redeplace("active");
+        btn.classList.remove("active");
     });
 
     // reset body classes
