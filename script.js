@@ -1,4 +1,4 @@
-// ================== ELEMENTS ==================
+// Elements 
 const canvas = document.getElementById("canvas");
 const colorPicker = document.getElementById("colorPicker");
 
@@ -15,7 +15,7 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0, offsetY = 0;
 
-// ================== MODES ==================
+// Les différents modes
 function setMode(newMode) {
     mode = newMode;
 
@@ -46,7 +46,7 @@ function setMode(newMode) {
     }
 }
 
-// ================== FORMES ==================
+// Les formes de dessin
 function clearShapeButtons() {
     document.querySelectorAll("[data-shape]").forEach(btn => {
         btn.classList.remove("active");
@@ -59,7 +59,7 @@ function setActiveShapeButton(shape) {
     if (btn) btn.classList.add("active");
 }
 
-// init
+// initialisation
 setMode("draw");
 
 // boutons modes
@@ -79,12 +79,12 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
     };
 });
 
-// ================== MOUSEDOWN ==================
+// Partie Souris
 canvas.addEventListener("mousedown", (e) => {
 
     const canvasRect = canvas.getBoundingClientRect();
 
-    // ===== DEPLACEMENT =====
+    // deplacement
     if (mode === "move" && e.target.classList.contains("shape")) {
 
         isDragging = true;
@@ -97,7 +97,7 @@ canvas.addEventListener("mousedown", (e) => {
         return;
     }
 
-    // ===== DESSIN (UNIQUEMENT SUR LE CANVAS) =====
+    // dessin sur le canva
     if (mode === "draw" && e.target === canvas) {
 
         startX = e.clientX - canvasRect.left;
@@ -115,19 +115,19 @@ canvas.addEventListener("mousedown", (e) => {
     }
 });
 
-// ================== MOUSEMOVE ==================
+// deplacement de la souris
 canvas.addEventListener("mousemove", (e) => {
 
     const canvasRect = canvas.getBoundingClientRect();
 
-    // ===== DRAG =====
+    // repère
     if (isDragging) {
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
         return;
     }
 
-    // ===== DRAW =====
+    // dessin
     if (!isDrawing) return;
 
     let currentX = e.clientX - canvasRect.left;
@@ -166,13 +166,13 @@ canvas.addEventListener("mousemove", (e) => {
     }
 });
 
-// ================== MOUSEUP ==================
+// souris
 document.addEventListener("mouseup", () => {
     isDrawing = false;
     isDragging = false;
 });
 
-// ================== CLICK ==================
+// clic souris
 canvas.addEventListener("click", (e) => {
 
     const target = e.target;
