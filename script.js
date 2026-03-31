@@ -7,14 +7,13 @@ let mode = "draw";
 
 // dessin
 let isDrawing = false;
-let startX, startY;
+let startX = 0, startY = 0;
 let currentElement = null;
 
 // déplacement
 let isDragging = false;
 let draggedElement = null;
-let offsetX = 0;
-let offsetY = 0;
+let offsetX = 0, offsetY = 0;
 
 // ================== MODES ==================
 function setMode(newMode) {
@@ -42,6 +41,7 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 canvas.addEventListener("mousedown", (e) => {
 
     const target = e.target;
+    const canvasRect = canvas.getBoundingClientRect();
 
     // ===== DEPLACEMENT =====
     if (mode === "move" && target.classList.contains("shape")) {
@@ -59,9 +59,10 @@ canvas.addEventListener("mousedown", (e) => {
     // ===== DESSIN =====
     if (mode === "draw") {
 
+        startX = e.clientX - canvasRect.left;
+        startY = e.clientY - canvasRect.top;
+
         isDrawing = true;
-        startX = e.offsetX;
-        startY = e.offsetY;
 
         currentElement = document.createElement("div");
         currentElement.classList.add("shape");
@@ -76,10 +77,10 @@ canvas.addEventListener("mousedown", (e) => {
 // ================== MOUSEMOVE ==================
 canvas.addEventListener("mousemove", (e) => {
 
+    const canvasRect = canvas.getBoundingClientRect();
+
     // ===== DRAG =====
     if (isDragging) {
-        const canvasRect = canvas.getBoundingClientRect();
-
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
         return;
@@ -88,12 +89,14 @@ canvas.addEventListener("mousemove", (e) => {
     // ===== DRAW =====
     if (!isDrawing) return;
 
-    let width = e.offsetX - startX;
-    let height = e.offsetY - startY;
+    let currentX = e.clientX - canvasRect.left;
+    let currentY = e.clientY - canvasRect.top;
 
-    // gestion dessin dans tous les sens
-    currentElement.style.left = (width < 0 ? e.offsetX : startX) + "px";
-    currentElement.style.top = (height < 0 ? e.offsetY : startY) + "px";
+    let width = currentX - startX;
+    let height = currentY - startY;
+
+    currentElement.style.left = (width < 0 ? currentX : startX) + "px";
+    currentElement.style.top = (height < 0 ? currentY : startY) + "px";
 
     width = Math.abs(width);
     height = Math.abs(height);
@@ -128,7 +131,7 @@ document.addEventListener("mouseup", () => {
     isDragging = false;
 });
 
-// ================== CLICK (COLOR / DELETE) ==================
+// ================== CLICK (DELETE / COLOR) ==================
 canvas.addEventListener("click", (e) => {
 
     const target = e.target;
@@ -140,7 +143,7 @@ canvas.addEventListener("click", (e) => {
         return;
     }
 
-    // changement couleur
+    // changement de couleur
     if (mode === "draw") {
         if (target.classList.contains("triangle")) {
             target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
