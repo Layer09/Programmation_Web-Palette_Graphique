@@ -1,34 +1,48 @@
+/* GLOBAL */
 body {
     margin: 0;
     font-family: Arial;
+    display: flex;
 }
 
+/* TOOLBAR */
 #toolbar {
-    padding: 10px;
+    width: 120px;
     background: #333;
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 5px;
+    box-sizing: border-box;
 }
 
-#toolbar button, #toolbar input {
-    margin-right: 10px;
-    padding: 5px 10px;
+#toolbar button,
+#toolbar input {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    padding: 5px;
+    box-sizing: border-box;
     cursor: pointer;
+    border: none;
 }
 
+/* couleur active */
 .active {
     background: #00bbff;
 }
 
-/* canvas */
+/* CANVAS */
 #canvas {
-    width: 100%;
-    height: 90vh;
+    flex: 1; /* prend tout l’espace restant */
+    height: 100vh;
     position: relative;
-    background: #f0f0f0;
+    background: #EEEEEE;
     overflow: hidden;
 }
 
-/* formes */
+/* FORMES */
 .shape {
     position: absolute;
 }
@@ -45,7 +59,7 @@ body {
     border-style: solid;
 }
 
-/* 🔥 IMPORTANT : bloque les formes en mode dessin */
+/* bloque les formes en mode dessin */
 body.draw-mode .shape {
     pointer-events: none;
 }
