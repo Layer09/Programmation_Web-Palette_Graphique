@@ -12,12 +12,14 @@ body {
 #toolbar button, #toolbar input {
     margin-right: 10px;
     padding: 5px 10px;
+    cursor: pointer;
 }
 
 .active {
     background: orange;
 }
 
+/* canvas */
 #canvas {
     width: 100%;
     height: 90vh;
@@ -31,12 +33,19 @@ body {
     position: absolute;
 }
 
+/* cercle */
 .circle {
     border-radius: 50%;
 }
 
+/* triangle */
 .triangle {
     width: 0;
     height: 0;
     border-style: solid;
+}
+
+/* 🔥 IMPORTANT : bloque les formes en mode dessin */
+body.draw-mode .shape {
+    pointer-events: none;
 }
