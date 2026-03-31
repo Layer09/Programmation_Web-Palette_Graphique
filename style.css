@@ -11,6 +11,11 @@ body {
 
 #toolbar button, #toolbar input {
     margin-right: 10px;
+    padding: 5px 10px;
+}
+
+.active {
+    background: orange;
 }
 
 #canvas {
@@ -21,7 +26,7 @@ body {
     overflow: hidden;
 }
 
-/* Formes */
+/* formes */
 .shape {
     position: absolute;
 }
