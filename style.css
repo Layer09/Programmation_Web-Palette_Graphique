@@ -8,13 +8,17 @@ body {
 /* TOOLBAR */
 #toolbar {
     width: 120px;
-    background: #333;
+    background: #333333;
     color: white;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     padding: 10px 5px;
     box-sizing: border-box;
+}
+
+hr {
+    color: #333333
 }
 
 #toolbar button,
