@@ -36,13 +36,13 @@ hr {
 #rectangle {
     font-size: 25px;
 }
-#circle {
+#cercle {
     font-size: 30px;
 }
 #triangle {
     font-size: 25px;
 }
-#drawMode, #moveMode, #deleteMode {
+#dessinMode, #deplaceMode, #supprimeMode {
     font-size: 25px;
 }
 
@@ -66,7 +66,7 @@ hr {
 }
 
 /* Cercle */
-.circle {
+.cercle {
     border-radius: 50%;
 }
 
@@ -78,6 +78,6 @@ hr {
 }
 
 /* Bloque les formes en mode dessin */
-body.draw-mode .shape {
+body.dessin-mode .shape {
     pointer-events: none;
 }
