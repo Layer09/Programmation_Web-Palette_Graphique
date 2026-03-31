@@ -28,7 +28,7 @@ body {
 
 /* formes */
 .shape {
-    position: absolute;
+    position: relative;
 }
 
 .circle {
