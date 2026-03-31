@@ -19,7 +19,7 @@ let offsetX = 0, offsetY = 0;
 function setMode(newMode) {
     mode = newMode;
 
-    // reset boutons
+    // reset boutons mode
     document.querySelectorAll("#toolbar button").forEach(btn => {
         btn.classList.remove("active");
     });
@@ -28,22 +28,55 @@ function setMode(newMode) {
     document.body.classList.remove("draw-mode", "move-mode", "delete-mode");
     document.body.classList.add(newMode + "-mode");
 
-    if (newMode === "draw") document.getElementById("drawMode").classList.add("active");
-    if (newMode === "move") document.getElementById("moveMode").classList.add("active");
-    if (newMode === "delete") document.getElementById("deleteMode").classList.add("active");
+    if (newMode === "draw") {
+        document.getElementById("drawMode").classList.add("active");
+
+        // réactiver la forme sélectionnée
+        setActiveShapeButton(currentShape);
+    }
+
+    if (newMode === "move") {
+        document.getElementById("moveMode").classList.add("active");
+        clearShapeButtons();
+    }
+
+    if (newMode === "delete") {
+        document.getElementById("deleteMode").classList.add("active");
+        clearShapeButtons();
+    }
+}
+
+// ================== FORMES ==================
+function clearShapeButtons() {
+    document.querySelectorAll("[data-shape]").forEach(btn => {
+        btn.classList.remove("active");
+    });
+}
+
+function setActiveShapeButton(shape) {
+    clearShapeButtons();
+    const btn = document.querySelector(`[data-shape="${shape}"]`);
+    if (btn) btn.classList.add("active");
 }
 
 // init
 setMode("draw");
 
-// boutons
+// boutons modes
 document.getElementById("drawMode").onclick = () => setMode("draw");
 document.getElementById("moveMode").onclick = () => setMode("move");
 document.getElementById("deleteMode").onclick = () => setMode("delete");
 
-// formes
+// boutons formes
 document.querySelectorAll("[data-shape]").forEach(btn => {
-    btn.onclick = () => currentShape = btn.dataset.shape;
+    btn.onclick = () => {
+        currentShape = btn.dataset.shape;
+
+        // activer seulement en mode draw
+        if (mode === "draw") {
+            setActiveShapeButton(currentShape);
+        }
+    };
 });
 
 // ================== MOUSEDOWN ==================
@@ -114,7 +147,6 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
-        if (mode === "draw") document.getElementById("rectangle").classList.add("active");
     }
 
     // cercle
@@ -123,8 +155,6 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.width = width + "px";
         currentElement.style.height = height + "px";
         currentElement.style.backgroundColor = colorPicker.value;
-        if (mode === "draw") document.getElementById("circle").classList.add("active");
-
     }
 
     // triangle
@@ -133,8 +163,6 @@ canvas.addEventListener("mousemove", (e) => {
         currentElement.style.borderWidth = `0 ${width/2}px ${height}px ${width/2}px`;
         currentElement.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
         currentElement.style.backgroundColor = "transparent";
-        if (mode === "draw") document.getElementById("triangle").classList.add("active");
-
     }
 });
 
