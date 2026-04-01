@@ -17,9 +17,7 @@ body {
 
 /* Séparation des "zones" dans la barre d'outils */
 hr {
-    color: #333333;
-    border-top: 2px solid #333333;
-}
+    border: none;
 }
 
 /* Boutons de la barre d'outils */
