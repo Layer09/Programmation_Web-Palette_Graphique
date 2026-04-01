@@ -122,7 +122,7 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
 });
 
 // Déplacement de la souris
-canvas.addEventListener("mousedeplace", (e) => {
+canvas.addEventListener("mousemove", (e) => {
     // Déplacement de la souris (sans clic)
 
     const canvasRect = canvas.getBoundingClientRect();
