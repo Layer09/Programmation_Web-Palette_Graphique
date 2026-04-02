@@ -16,19 +16,17 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0, offsetY = 0;
 
-// ✅ AJOUT : éviter le clic après dessin
-let hasDrawn = false;
+// Détecter si la souris a bougé (modification d'une couleur de forme)
+let hasMoved = false;
 
 // Les différents modes
 function setMode(newMode) {
     mode = newMode;
 
-    // reset boutons mode
     document.querySelectorAll("#toolbar button").forEach(btn => {
         btn.classList.remove("active");
     });
 
-    // reset body classes
     document.body.classList.remove("dessin-mode", "deplace-mode", "supprime-mode");
     document.body.classList.add(newMode + "-mode");
 
@@ -84,6 +82,8 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 // Partie Souris 
 canvas.addEventListener("mousedown", (e) => {
 
+    hasMoved = false; // ✅ reset mouvement
+
     const canvasRect = canvas.getBoundingClientRect();
 
     // Déplacement
@@ -102,8 +102,6 @@ canvas.addEventListener("mousedown", (e) => {
     // Dessin sur le canva
     if (mode === "dessin" && e.target === canvas) {
 
-        hasDrawn = true; // ✅ AJOUT
-
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
 
@@ -121,6 +119,8 @@ canvas.addEventListener("mousedown", (e) => {
 
 // Déplacement de la souris
 canvas.addEventListener("mousemove", (e) => {
+
+    hasMoved = true; // Détecte mouvement
 
     const canvasRect = canvas.getBoundingClientRect();
 
@@ -177,11 +177,7 @@ document.addEventListener("mouseup", () => {
 // Clic souris
 canvas.addEventListener("click", (e) => {
 
-    // Ignorer le clic juste après un dessin (sinon changement de couleru impossible)
-    if (hasDrawn) {
-        hasDrawn = false;
-        return;
-    }
+    if (hasMoved) return; // ignore si mouvement
 
     const target = e.target.closest(".shape");
     if (!target) return;
