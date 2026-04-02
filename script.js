@@ -109,19 +109,18 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
     }
 
     // Dessin sur le canvas uniquement si ce n'est pas une forme existante
-    if (mode === "dessin" && e.target === canvas) {
-
+    if (mode === "dessin" && !e.target.classList.contains("shape")) {
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
-
+    
         isDrawing = true;
-
+    
         currentElement = document.createElement("div");
         currentElement.classList.add("shape");
-
+    
         currentElement.style.left = startX + "px";
         currentElement.style.top = startY + "px";
-
+    
         canvas.appendChild(currentElement);
     }
 });
