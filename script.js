@@ -1,6 +1,6 @@
 // Elements qui composent la page
 const canvas = document.getElementById("canvas");
-const colorPicker = document.getElementById("colorPicker");
+const colorPicker = document.getElementById("colorPicker"); // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/color
 
 // Elements sélectionnés par défaut (Dessiner et Rectangle)
 let currentShape = "rectangle";
@@ -16,30 +16,34 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0, offsetY = 0;
 
-// Détecter si la souris a bougé (modification d'une couleur de forme)
-let hasMoved = false;
-
 // Les différents modes
 function setMode(newMode) {
     mode = newMode;
 
+    // reset boutons mode
     document.querySelectorAll("#toolbar button").forEach(btn => {
         btn.classList.remove("active");
     });
 
+    // reset body classes
     document.body.classList.remove("dessin-mode", "deplace-mode", "supprime-mode");
     document.body.classList.add(newMode + "-mode");
 
+    /* Méthode dessin */
     if (newMode === "dessin") {
         document.getElementById("dessinMode").classList.add("active");
+
+        // Reprendre la dernière forme sélectionnée pour la rendre active quand le bouton "Dessin" est à nouveau sélectionné
         setActiveShapeButton(currentShape);
     }
 
+    /* Méthode déplacer */
     if (newMode === "deplace") {
         document.getElementById("deplaceMode").classList.add("active");
         clearShapeButtons();
     }
 
+    /* Méthide supprimer */
     if (newMode === "supprime") {
         document.getElementById("supprimeMode").classList.add("active");
         clearShapeButtons();
@@ -73,6 +77,7 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
     btn.onclick = () => {
         currentShape = btn.dataset.shape;
 
+        // activer seulement en mode dessin
         if (mode === "dessin") {
             setActiveShapeButton(currentShape);
         }
@@ -80,9 +85,8 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 });
 
 // Partie Souris 
-canvas.addEventListener("mousedown", (e) => {
-
-    hasMoved = false; // ✅ reset mouvement
+canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event
+    // Quand souris déplacée avec le clic enfoncé
 
     const canvasRect = canvas.getBoundingClientRect();
 
@@ -119,11 +123,11 @@ canvas.addEventListener("mousedown", (e) => {
 
 // Déplacement de la souris
 canvas.addEventListener("mousemove", (e) => {
-
-    hasMoved = true; // Détecte mouvement
+    // Déplacement de la souris (sans clic)
 
     const canvasRect = canvas.getBoundingClientRect();
 
+    // Repère
     if (isDragging) {
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
@@ -176,12 +180,11 @@ document.addEventListener("mouseup", () => {
 
 // Clic souris
 canvas.addEventListener("click", (e) => {
+    // Souris cliquée sans déplacement
 
-    if (hasMoved) return; // ignore si mouvement
+    const target = e.target;
+    if (!target.classList.contains("shape")) return;
 
-    const target = e.target.closest(".shape");
-    if (!target) return;
-    
     // Suppression
     if (mode === "supprime") {
         target.remove();
