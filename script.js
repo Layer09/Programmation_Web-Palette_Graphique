@@ -182,7 +182,7 @@ document.addEventListener("mouseup", () => {
 canvas.addEventListener("click", (e) => {
     // Souris cliquée sans déplacement
 
-    const target = e.target;
+    const target = e.target.closest(".shape");
     if (!target.classList.contains("shape")) return;
 
     // Suppression
