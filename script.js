@@ -40,13 +40,13 @@ function setMode(newMode) {
         setActiveShapeButton(currentShape);
     }
 
-    /* Méthode déplacer */
+    // Méthode déplacer
     if (newMode === "deplace") {
         document.getElementById("deplaceMode").classList.add("active");
         clearShapeButtons();
     }
 
-    /* Méthide supprimer */
+    // Méthode supprimer
     if (newMode === "supprime") {
         document.getElementById("supprimeMode").classList.add("active");
         clearShapeButtons();
