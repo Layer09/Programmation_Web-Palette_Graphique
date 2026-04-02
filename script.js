@@ -108,7 +108,7 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
         return;
     }
 
-    // Dessin sur le canva
+    // Dessin sur le canvas uniquement si ce n'est pas une forme existante
     if (mode === "dessin" && e.target === canvas) {
 
         startX = e.clientX - canvasRect.left;
@@ -190,6 +190,7 @@ document.addEventListener("mouseup", () => {
 canvas.addEventListener("click", (e) => {
     // Souris cliquée sans déplacement
 
+    // Cherche la forme cliquée (ou un parent)
     const target = e.target.closest(".shape");
     if (!target) return;
 
@@ -200,6 +201,7 @@ canvas.addEventListener("click", (e) => {
     }
 
     // Changement couleur
+    // Toujours possible (même en mode dessin ou déplacement)
     if (target.classList.contains("triangle")) {
         target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
     } else {
