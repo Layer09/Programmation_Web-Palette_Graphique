@@ -190,10 +190,8 @@ document.addEventListener("mouseup", () => {
 canvas.addEventListener("click", (e) => {
     // Souris cliquée sans déplacement
 
-    if (hasMoved) return;
-
-    const target = e.target;
-    if (!target.classList.contains("shape")) return;
+    const target = e.target.closest(".shape");
+    if (!target) return;
 
     // Suppression
     if (mode === "supprime") {
@@ -202,11 +200,9 @@ canvas.addEventListener("click", (e) => {
     }
 
     // Changement couleur
-    if (mode === "dessin") {
-        if (target.classList.contains("triangle")) {
-            target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
-        } else {
-            target.style.backgroundColor = colorPicker.value;
-        }
+    if (target.classList.contains("triangle")) {
+        target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
+    } else {
+        target.style.backgroundColor = colorPicker.value;
     }
 });
