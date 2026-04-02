@@ -16,6 +16,9 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0, offsetY = 0;
 
+// Empêche le clic après un drag
+let hasMoved = false;
+
 // Les différents modes
 function setMode(newMode) {
     mode = newMode;
@@ -88,6 +91,8 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event
     // Quand souris déplacée avec le clic enfoncé
 
+    hasMoved = false;
+
     const canvasRect = canvas.getBoundingClientRect();
 
     // Déplacement
@@ -129,12 +134,15 @@ canvas.addEventListener("mousemove", (e) => {
 
     // Repère
     if (isDragging) {
+        hasMoved = true;
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
         return;
     }
 
     if (!isDrawing) return;
+
+    hasMoved = true;
 
     let currentX = e.clientX - canvasRect.left;
     let currentY = e.clientY - canvasRect.top;
@@ -181,6 +189,8 @@ document.addEventListener("mouseup", () => {
 // Clic souris
 canvas.addEventListener("click", (e) => {
     // Souris cliquée sans déplacement
+
+    if (hasMoved) return;
 
     const target = e.target;
     if (!target.classList.contains("shape")) return;
