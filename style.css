@@ -36,12 +36,15 @@ hr {
 #rectangle {
     font-size: 25px;
 }
+
 #cercle {
     font-size: 30px;
 }
+
 #triangle {
     font-size: 25px;
 }
+
 #dessinMode, #deplaceMode, #supprimeMode {
     font-size: 25px;
 }
@@ -75,9 +78,4 @@ hr {
     width: 0;
     height: 0;
     border-style: solid;
-}
-
-/* Bloque les formes en mode dessin */
-body.dessin-mode .shape {
-    pointer-events: none;
 }
