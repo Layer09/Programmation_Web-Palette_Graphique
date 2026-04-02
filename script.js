@@ -88,50 +88,51 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 });
 
 // Partie Souris 
-canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event
-    // Quand souris déplacée avec le clic enfoncé
-
+canvas.addEventListener("mousedown", (e) => {
     hasMoved = false;
-
     const canvasRect = canvas.getBoundingClientRect();
 
     // Déplacement
     if (mode === "deplace" && e.target.classList.contains("shape")) {
-
         isDragging = true;
         draggedElement = e.target;
-
         const rect = draggedElement.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
-
         return;
     }
 
-    // Dessin sur le canvas uniquement si ce n'est pas une forme existante
-    if (mode === "dessin" && !e.target.classList.contains("shape")) {
+    // Changement couleur directement si on clique sur une forme existante en mode dessin
+    if (mode === "dessin" && e.target.classList.contains("shape")) {
+        if (e.target.classList.contains("triangle")) {
+            e.target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
+        } else {
+            e.target.style.backgroundColor = colorPicker.value;
+        }
+        return; // Ne pas créer de nouvelle forme
+    }
+
+    // Dessin sur le canvas uniquement si on clique sur le canvas
+    if (mode === "dessin" && e.target === canvas) {
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
-    
+
         isDrawing = true;
-    
+
         currentElement = document.createElement("div");
         currentElement.classList.add("shape");
-    
+
         currentElement.style.left = startX + "px";
         currentElement.style.top = startY + "px";
-    
+
         canvas.appendChild(currentElement);
     }
 });
 
 // Déplacement de la souris
 canvas.addEventListener("mousemove", (e) => {
-    // Déplacement de la souris (sans clic)
-
     const canvasRect = canvas.getBoundingClientRect();
 
-    // Repère
     if (isDragging) {
         hasMoved = true;
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
@@ -140,7 +141,6 @@ canvas.addEventListener("mousemove", (e) => {
     }
 
     if (!isDrawing) return;
-
     hasMoved = true;
 
     let currentX = e.clientX - canvasRect.left;
@@ -185,11 +185,8 @@ document.addEventListener("mouseup", () => {
     isDragging = false;
 });
 
-// Clic souris
+// Le clic global reste pour suppression et autres modes
 canvas.addEventListener("click", (e) => {
-    // Souris cliquée sans déplacement
-
-    // Cherche la forme cliquée (ou un parent)
     const target = e.target.closest(".shape");
     if (!target) return;
 
@@ -199,8 +196,7 @@ canvas.addEventListener("click", (e) => {
         return;
     }
 
-    // Changement couleur
-    // Toujours possible (même en mode dessin ou déplacement)
+    // Changement couleur (toujours actif pour sécurité)
     if (target.classList.contains("triangle")) {
         target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
     } else {
