@@ -89,7 +89,7 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 
 // Partie Souris 
 canvas.addEventListener("mousedown", (e) => {
-    hasMoved = false;
+    hasMoved = false; // reset à chaque clic
     const canvasRect = canvas.getBoundingClientRect();
 
     // Déplacement
@@ -104,12 +104,8 @@ canvas.addEventListener("mousedown", (e) => {
 
     // Changement couleur directement si on clique sur une forme existante en mode dessin
     if (mode === "dessin" && e.target.classList.contains("shape")) {
-        if (e.target.classList.contains("triangle")) {
-            e.target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
-        } else {
-            e.target.style.backgroundColor = colorPicker.value;
-        }
-        return; // Ne pas créer de nouvelle forme
+        // on change la couleur seulement si on ne bouge pas (hasMoved reste false)
+        return; // On gère la couleur sur click, pas ici
     }
 
     // Dessin sur le canvas uniquement si on clique sur le canvas
@@ -134,7 +130,7 @@ canvas.addEventListener("mousemove", (e) => {
     const canvasRect = canvas.getBoundingClientRect();
 
     if (isDragging) {
-        hasMoved = true;
+        hasMoved = true; // on a bougé donc clic ne changera pas la couleur
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
         return;
@@ -196,10 +192,12 @@ canvas.addEventListener("click", (e) => {
         return;
     }
 
-    // Changement couleur (toujours actif pour sécurité)
-    if (target.classList.contains("triangle")) {
-        target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
-    } else {
-        target.style.backgroundColor = colorPicker.value;
+    // Changement couleur
+    if ((mode === "dessin" && !hasMoved) || mode === "dessin") {
+        if (target.classList.contains("triangle")) {
+            target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
+        } else {
+            target.style.backgroundColor = colorPicker.value;
+        }
     }
 });
