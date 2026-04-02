@@ -1,6 +1,6 @@
 // Elements qui composent la page
 const canvas = document.getElementById("canvas");
-const colorPicker = document.getElementById("colorPicker"); // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/color
+const colorPicker = document.getElementById("colorPicker");
 
 // Elements sélectionnés par défaut (Dessiner et Rectangle)
 let currentShape = "rectangle";
@@ -16,6 +16,9 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0, offsetY = 0;
 
+// ✅ AJOUT : éviter le clic après dessin
+let hasDrawn = false;
+
 // Les différents modes
 function setMode(newMode) {
     mode = newMode;
@@ -29,21 +32,16 @@ function setMode(newMode) {
     document.body.classList.remove("dessin-mode", "deplace-mode", "supprime-mode");
     document.body.classList.add(newMode + "-mode");
 
-    /* Méthode dessin */
     if (newMode === "dessin") {
         document.getElementById("dessinMode").classList.add("active");
-
-        // Reprendre la dernière forme sélectionnée pour la rendre active quand le bouton "Dessin" est à nouveau sélectionné
         setActiveShapeButton(currentShape);
     }
 
-    /* Méthode déplacer */
     if (newMode === "deplace") {
         document.getElementById("deplaceMode").classList.add("active");
         clearShapeButtons();
     }
 
-    /* Méthide supprimer */
     if (newMode === "supprime") {
         document.getElementById("supprimeMode").classList.add("active");
         clearShapeButtons();
@@ -77,7 +75,6 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
     btn.onclick = () => {
         currentShape = btn.dataset.shape;
 
-        // activer seulement en mode dessin
         if (mode === "dessin") {
             setActiveShapeButton(currentShape);
         }
@@ -85,8 +82,7 @@ document.querySelectorAll("[data-shape]").forEach(btn => {
 });
 
 // Partie Souris 
-canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event
-    // Quand souris déplacée avec le clic enfoncé
+canvas.addEventListener("mousedown", (e) => {
 
     const canvasRect = canvas.getBoundingClientRect();
 
@@ -106,6 +102,8 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
     // Dessin sur le canva
     if (mode === "dessin" && e.target === canvas) {
 
+        hasDrawn = true; // ✅ AJOUT
+
         startX = e.clientX - canvasRect.left;
         startY = e.clientY - canvasRect.top;
 
@@ -123,11 +121,9 @@ canvas.addEventListener("mousedown", (e) => { // https://developer.mozilla.org/e
 
 // Déplacement de la souris
 canvas.addEventListener("mousemove", (e) => {
-    // Déplacement de la souris (sans clic)
 
     const canvasRect = canvas.getBoundingClientRect();
 
-    // Repère
     if (isDragging) {
         draggedElement.style.left = (e.clientX - canvasRect.left - offsetX) + "px";
         draggedElement.style.top = (e.clientY - canvasRect.top - offsetY) + "px";
@@ -180,7 +176,12 @@ document.addEventListener("mouseup", () => {
 
 // Clic souris
 canvas.addEventListener("click", (e) => {
-    // Souris cliquée sans déplacement
+
+    // Ignorer le clic juste après un dessin (sinon changement de couleru impossible)
+    if (hasDrawn) {
+        hasDrawn = false;
+        return;
+    }
 
     const target = e.target.closest(".shape");
     if (!target) return;
