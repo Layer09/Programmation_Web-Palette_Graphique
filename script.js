@@ -102,12 +102,6 @@ canvas.addEventListener("mousedown", (e) => {
         return;
     }
 
-    // Changement couleur directement si on clique sur une forme existante en mode dessin
-    if (mode === "dessin" && e.target.classList.contains("shape")) {
-        // on change la couleur seulement si on ne bouge pas (hasMoved reste false)
-        return; // On gère la couleur sur click, pas ici
-    }
-
     // Dessin sur le canvas uniquement si on clique sur le canvas
     if (mode === "dessin" && e.target === canvas) {
         startX = e.clientX - canvasRect.left;
@@ -193,7 +187,7 @@ canvas.addEventListener("click", (e) => {
     }
 
     // Changement couleur
-    if ((mode === "dessin" && !hasMoved) || mode === "dessin") {
+    if (mode === "dessin" && !hasMoved) {
         if (target.classList.contains("triangle")) {
             target.style.borderColor = `transparent transparent ${colorPicker.value} transparent`;
         } else {
